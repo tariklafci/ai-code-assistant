@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <title>AI Code Assistant</title>
+  <style>
+    body { font-family: sans-serif; margin: 2rem; }
+    textarea { width: 100%; height: 6em; }
+    pre { background: #f4f4f4; padding: 1em; border-radius: 4px; }
+  </style>
+</head>
+<body>
+  <h1>AI Code Assistant</h1>
+  <form id="frm">
+    <textarea name="prompt" placeholder="Describe the code you need…"></textarea><br/>
+    <button type="submit">Generate Code</button>
+  </form>
+  <h2 id="title"></h2>
+  <pre id="code"></pre>
+
+  <script>
+    document.getElementById('frm').onsubmit = async e => {
+      e.preventDefault();
+      const prompt = e.target.prompt.value;
+      const res = await fetch('/generate', {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({prompt})
+      });
+      const j = await res.json();
+      document.getElementById('title').innerText = j.title;
+      document.getElementById('code').innerText  = j.code;
+    };
+  </script>
+</body>
+</html>

@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "ai-code-assistant.fullname" . }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ include "ai-code-assistant.name" . }}
+  template:
+    metadata:
+      labels:
+        app: {{ include "ai-code-assistant.name" . }}
+    spec:
+      containers:
+      - name: ai-code-assistant
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        ports:
+        - containerPort: 5000
+        resources: {{ .Values.resources | toYaml | nindent 10 }}

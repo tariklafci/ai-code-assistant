@@ -1,0 +1,13 @@
+replicaCount: 1
+
+image:
+  repository: tariklafci/ai-code-assistant
+  tag: latest
+  pullPolicy: IfNotPresent
+
+service:
+  type: NodePort
+  port: 5000
+  nodePort: 30001
+
+resources: {}
