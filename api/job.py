@@ -9,6 +9,10 @@ SYSTEM_INSTRUCTION = (
     "You do not answer general questions or do anything unrelated to Python code generation. "
     "If the user asks a non-Python-related question, respond with:\n"
     "\"Sorry, I only generate Python code.\""
+    "Your response must include a title using this format:\n\n"
+    "Title: <one-line summary>\n\n"
+    "Then give the code inside a Python code block like:\n"
+    "```python\n<your code here>\n```"
 )
 
 def call_llm(prompt: str) -> str:
@@ -17,7 +21,7 @@ def call_llm(prompt: str) -> str:
     Returns stdout if successful, or a combined error message.
     """
     full_prompt = f"{SYSTEM_INSTRUCTION}\n\nUser prompt: {prompt}"
-    
+
     try:
         proc = subprocess.run(
             ["ollama", "run", "llama2", full_prompt],
@@ -47,7 +51,7 @@ def parse_response(text: str) -> tuple[str, str]:
     m_title = re.search(r"^Title:\s*(.+)$", text, re.MULTILINE)
     title = m_title.group(1).strip() if m_title else "Generated Code"
 
-    m_code = re.search(r"```(?:python)?\s*([\s\S]+?)```", text)
+    m_code = re.search(r"```(?:python)?\\s*([\\s\\S]+?)```", text)
     code = m_code.group(1).rstrip() if m_code else text
 
     return title, code
@@ -62,6 +66,11 @@ class Job(Task):
         self.output['code']  = code.splitlines()
 
     def calculate_score(self):
-        # one point per 10 lines, max 10
-        self.score = min(10, len(self.output.get('
+        code_lines = self.output.get('code', [])
+
+        # Safety check: if it's a string instead of a list, split it
+        if isinstance(code_lines, str):
+            code_lines = code_lines.splitlines()
+
+        self.score = min(10, len(code_lines) // 10)
 
