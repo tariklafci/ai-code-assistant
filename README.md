@@ -48,18 +48,23 @@ Open [http://localhost:5000](http://localhost:5000) in your browser.
 
 ## Run on Kubernetes (Minikube)
 
-### Step 1: Start Minikube
+### Option 1: Your Local Docker Build (pullPolicy is defined as: IfNotPresent inside values.yaml, if you build your own build, it will use local build.)
 
 ```bash
 minikube start --memory=7302 --cpus=4
 eval $(minikube docker-env)
 docker build -t ai-code-assistant . (inside the project main folder)
 ```
+### Option 2: My DockerHub Build (pullPolicy is defined as: IfNotPresent inside values.yaml, if you do not build with docker build -t, it will automatically download the tariklafci/ai-code-assistant build from DockerHub.)
+```bash
+minikube start --memory=7302 --cpus=4
+```
+
 ### Step 2: Deploy with Helm
 
 ```bash
 helm install ai-code ./chart
-minikube service ai-code-assistant-service (This will download a 3.6GB model, so it may take some time for the website to become available.)
+minikube service ai-code-assistant (This will download a 3.6GB model with your own build, so it may take some time for the website to become available.)
 minikube ip (You can visit the output of this code to reach to the website.)
 ```
 
