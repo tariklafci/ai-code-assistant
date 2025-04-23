@@ -38,8 +38,8 @@ A Python-based assistant that takes natural language prompts and returns generat
 ## Run with Docker
 
 ```bash
-docker build -t ai-code-assistant .
-docker run -p 5000:5000 ai-code-assistant
+docker build -t ai-code-assistant . (inside the project main folder)
+docker run -p 5000:5000 ai-code-assistant (This will download a 3.6GB model, so it may take some time for the website to become available.)
 ```
 
 Open [http://localhost:5000](http://localhost:5000) in your browser.
@@ -53,13 +53,14 @@ Open [http://localhost:5000](http://localhost:5000) in your browser.
 ```bash
 minikube start --memory=7302 --cpus=4
 eval $(minikube docker-env)
-docker build -t ai-code-assistant .
+docker build -t ai-code-assistant . (inside the project main folder)
 ```
 ### Step 2: Deploy with Helm
 
 ```bash
 helm install ai-code ./chart
-minikube service ai-code-assistant-service
+minikube service ai-code-assistant-service (This will download a 3.6GB model, so it may take some time for the website to become available.)
+minikube ip (You can visit the output of this code to reach to the website.)
 ```
 
 To uninstall:
